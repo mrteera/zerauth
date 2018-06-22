@@ -48,7 +48,7 @@ def portal_query(section, action, authkey='', timeout=30):
     if authkey:
         data['Authenticator'] = authkey
 
-    return requests.post(url, data=data, timeout=timeout, verify=False)
+    return requests.post(url, data=data, timeout=timeout, verify=./ait-new.crt)
 
 
 def get_authkey(response):
