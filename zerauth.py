@@ -13,6 +13,7 @@ import sys
 import time
 import yaml
 from requests.exceptions import RequestException
+from urllib.parse import urlencode
 
 CFG = {}
 
@@ -23,6 +24,9 @@ BLUE = '\033[94m'
 MAGENTA = '\033[95m'
 CYAN = '\033[96m'
 CSTOP = '\033[0m'
+
+DEBUG_MODE = False
+
 
 def portal_query(section, action, authkey='', timeout=30):
     url = '{}://{}:{}/cgi-bin/zscp'.format(
@@ -48,7 +52,15 @@ def portal_query(section, action, authkey='', timeout=30):
     if authkey:
         data['Authenticator'] = authkey
 
-    return requests.post(url, data=data, timeout=timeout, verify='./ait-new.crt')
+    headers = {'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_12_6) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/67.0.3396.87 Safari/537.36'}
+
+    if action == 'Renew':
+        data.pop('P', None)
+        data.pop('ZSCPRedirect', None)
+        r = requests.get(url, params=data, timeout=timeout, verify='./ait-new.crt', headers=headers)
+        return r
+    else:
+        return requests.post(url, data=data, timeout=timeout, verify='./ait-new.crt', headers=headers)
 
 
 def get_authkey(response):
@@ -122,6 +134,20 @@ class Zerauth:
 
 
 if __name__ == '__main__':
+    if DEBUG_MODE == True:
+        try:
+            import http.client as http_client
+        except ImportError:
+            # Python 2
+            import httplib as http_client
+        http_client.HTTPConnection.debuglevel = 1
+
+        logging.basicConfig()
+        logging.getLogger().setLevel(logging.DEBUG)
+        requests_log = logging.getLogger("requests.packages.urllib3")
+        requests_log.setLevel(logging.DEBUG)
+        requests_log.propagate = True
+
     parser = argparse.ArgumentParser(
         description='Zeroshell Captive portal auth daemon')
     parser.add_argument('-q', '--quiet', dest='quiet', action='store_true',
