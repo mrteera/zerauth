@@ -10,16 +10,13 @@ connections and reconnects itself when the renewal requests timeout.
 
 # Install
 
-    $ git clone git@bitbucket.org:serialk/zerauth.git
+    $ git clone https://github.com/mrteera/zerauth
     $ cd zerauth
-    # pip install -r requirements.txt
-
-    # cp zerauth.py /usr/bin/zerauth
-    # cp zerauth.yml /etc/zerauth.conf
+    $ pip3 install -r requirements.txt
 
 # Config
 
-    $ vim /etc/zerauth.conf
+    $ vim zerauth.conf
 
     login:
         username:               # Your username
@@ -31,9 +28,7 @@ connections and reconnects itself when the renewal requests timeout.
         port: 12080             # The port associated with the right protocol
         protocol: http          # http or https (must match with 'port')
         renew_delay: 40         # Seconds between each renew request
+        
+# Usage
 
-# systemd
-
-    $ cp systemd/zerauth.service /etc/systemd/system
-    $ systemctl enable zerauth
-    $ systemctl start zerauth
+    $ python3 zerauth.py
