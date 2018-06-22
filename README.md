@@ -31,4 +31,4 @@ connections and reconnects itself when the renewal requests timeout.
         
 # Usage
 
-    $ python3 zerauth.py
+    $ python3 -W ignore zerauth.py
