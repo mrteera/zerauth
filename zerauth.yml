@@ -1,0 +1,10 @@
+login:
+    username: your_username
+    password: your_password
+    domain: firewall
+
+server:
+    host: 192.41.170.39
+    port: 12081
+    protocol: https
+    renew_delay: 40
