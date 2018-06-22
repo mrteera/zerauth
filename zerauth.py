@@ -106,7 +106,12 @@ class Zerauth:
                     # In case of suspend
                     if time.time() - last > CFG['server']['renew_delay'] * 1.5:
                         raise RuntimeError("System has been suspended")
+                    requests.get('https://github.com/mrteera/zerauth/raw/master/1.png')
             except (RequestException, RuntimeError) as e:
+                logging.error(
+                        'Renew failed: "{}", trying to reconnect.'.format(e))
+                self.connect()
+            except requests.exceptions.SSLError as e:
                 logging.error(
                         'Renew failed: "{}", trying to reconnect.'.format(e))
                 self.connect()
